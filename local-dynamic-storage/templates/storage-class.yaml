@@ -1,0 +1,113 @@
+#
+# Copyright (c) 2021 the original author or authors.
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aist-hostpath-provisioner
+  labels:
+    k8s-app: aist-hostpath-provisioner
+  namespace: kube-system
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      k8s-app: aist-hostpath-provisioner
+  template:
+    metadata:
+      labels:
+        k8s-app: aist-hostpath-provisioner
+    spec:
+      serviceAccountName: aist-hostpath
+      containers:
+        - name: aist-hostpath-provisioner
+          image: {{ .Values.provisioner }}
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: PV_DIR
+              value: {{ .Values.hostMainPath }}
+            - name: PV_RECLAIM_POLICY
+              value: Delete
+          volumeMounts:
+            - name: pv-volume
+              mountPath: {{ .Values.hostMainPath }}
+      volumes:
+        - name: pv-volume
+          hostPath:
+            path: {{ .Values.hostMainPath }}
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: aist-hostpath
+provisioner: aist.science/hostpath
+volumeBindingMode: Immediate
+reclaimPolicy: Delete
+allowVolumeExpansion: false
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aist-hostpath
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: aist-hostpath
+rules:
+  - apiGroups: [""]
+    resources:
+      - persistentvolumeclaims
+    verbs:
+      - list
+      - get
+      - watch
+      - update
+  - apiGroups: [""]
+    resources:
+      - persistentvolumes
+    verbs:
+      - list
+      - get
+      - update
+      - watch
+      - create
+      - delete
+  - apiGroups: [""]
+    resources:
+      - events
+    verbs:
+      - create
+      - list
+      - patch
+  - apiGroups: ["storage.k8s.io"]
+    resources:
+      - storageclasses
+    verbs:
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: aist-hostpath
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: aist-hostpath
+subjects:
+  - kind: ServiceAccount
+    name: aist-hostpath
+    namespace: kube-system

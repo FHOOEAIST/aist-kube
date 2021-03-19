@@ -1,0 +1,50 @@
+#
+# Copyright (c) 2021 the original author or authors.
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.setup.deploymentName }}-notebook-webdav
+  namespace: {{ .Values.setup.deploymentName }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.setup.deploymentName }}-notebook-webdav
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.setup.deploymentName }}-notebook-webdav
+    spec:
+      volumes:
+        - name: {{ .Values.setup.deploymentName }}-notebook-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.setup.deploymentName }}-notebook-pvc
+      containers:
+        - name: {{ .Values.setup.deploymentName }}-notebook-webdav
+          image: {{ printf "%s/%s/alpine-webdav:latest" .Values.setup.repository .Values.setup.imageOwner }}
+          volumeMounts:
+            - name: {{ .Values.setup.deploymentName }}-notebook-data
+              mountPath: /var/lib/dav/data
+          env:
+            - name: "AUTH_TYPE"
+              value: "Digest"
+            - name: "USERNAME"
+              value: "jovyan"
+            - name: "PASSWORD"
+              value: {{ print .Values.setup.jovyanPassword | default "2rup5k83bsHwvBUc" }}
+            - name: "LOCATION"
+              value: {{ printf "/webdav/%s" .Values.setup.deploymentName }}
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "265Mi"

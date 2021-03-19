@@ -1,0 +1,50 @@
+#
+# Copyright (c) 2021 the original author or authors.
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
+#
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webdav
+  namespace: storage-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webdav
+  template:
+    metadata:
+      labels:
+        app: webdav
+    spec:
+      volumes:
+        - name: webdav-data
+          persistentVolumeClaim:
+            claimName: task-pv-claim
+      containers:
+        - name: webdav
+          image: {{ printf "%s/alpine-webdav:latest" .Values.webdavAndRegistry }}
+          volumeMounts:
+            - name: webdav-data
+              mountPath: /var/lib/dav/data
+          env:
+            - name: "AUTH_TYPE"
+              value: "Digest"
+            - name: "USERNAME"
+              value: "jovyan"
+            - name: "PASSWORD"
+              value: "test"
+            - name: "LOCATION"
+              value: "/webdav/test"
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "265Mi"
