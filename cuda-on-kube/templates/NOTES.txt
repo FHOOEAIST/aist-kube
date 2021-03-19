@@ -1,0 +1,23 @@
+--------------------------------------------------------------------------------------------------
+
+The chart {{ .Chart.Name }} is deployed successfully into the namespace {{ .Release.Name }}.
+The chart is based on: {{ .Values.setup.deploymentImage }}
+
+Please visit http://{{ .Values.setup.nodeUrl }}/notebook/{{ .Release.Name }}
+Login:
+    Token: {{ .Values.setup.jovyanPassword }}
+
+Please visit on of the following depending on your system:
+- Windows: http://{{ .Values.setup.nodeUrl }}/webdav/{{ .Release.Name }}
+- Linux Dolphin: webdavs://{{ .Values.setup.nodeUrl }}/webdav/{{ .Release.Name }}
+- Linux Nautilus: davs://{{ .Values.setup.nodeUrl }}/webdav/{{ .Release.Name }}
+Login:
+    User: jovyan
+    Password: {{ .Values.setup.jovyanPassword | default "2rup5k83bsHwvBUc" }}
+
+--------------------------------------------------------------------------------------------------
+
+See release status run:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get all {{ .Release.Name }}

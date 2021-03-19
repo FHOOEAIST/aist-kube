@@ -1,0 +1,3 @@
+*.yaml
+!auto_template.yaml
+!example.yaml
