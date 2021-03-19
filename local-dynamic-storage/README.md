@@ -11,7 +11,7 @@ In a multi node set up a more sophisticated storage solution such as cephfs shou
 
 The host path provisioning can only be deployed one time.
 This is because of the restriction that the storage class needs a named provisioner.
-This provisioner located in the deployment registers itself with a name into the 
+That provisioner used in the deployment registers itself with a name into the 
 kubernetes system. This name is unique and can not be deployed multiple times. 
 (It can but without any effect)
 
@@ -96,7 +96,7 @@ First prepare the disks that should be used for storing.
 1. For each disk that should be used do the following steps:
     1. **Important** 
        > The disk should be clean or should not contain any production data.
-       > after the following steps everything that was stored on that disk is not 
+       > After the following steps everything that was stored on that disk is not 
        > accessible anymore. Don't use the /dev/sda devices if it is mounted to `/`
        > or any other disk that is mounted to `/`!!!
     1. Use `fdisk /dev/{disk}` to start to repartition the disk. `{disk}` can 

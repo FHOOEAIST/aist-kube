@@ -2,7 +2,7 @@
 
 This **helm** chart exists to deploy a jupyter notebook with cuda support.
 Look up helm charts if you don't know it. Links: 
-* [helm.sh - base](helm.sh)
+* [helm.sh - base](https://helm.sh)
 * [helm chart creation guide](https://helm.sh/docs/chart_template_guide/)
 * [helm existing charts how-to](https://helm.sh/docs/howto/)
 
@@ -20,11 +20,11 @@ on the docker hub but with different base images to allow cuda (RTX3090) access.
 ## Use Setup.sh
 
 1. Navigate with a bash into the folder `cuda-on-kube`.
-1. Open the `setup.sh` file and customize the first three variables to your needs
+2. Open the `setup.sh` file and customize the first three variables to your needs
    * `repository` points to a private repository or `docker.io`
    * `imageOwner` states the owner of the published images
    * `base_url` the ip or dns name of the node hosting the microk8s system
-1. Run the setup script `./setup.sh` or `bash setup.sh`
+3. Run the setup script `./setup.sh` or `bash setup.sh`
 
 ## Manual
 
@@ -35,20 +35,20 @@ on the docker hub but with different base images to allow cuda (RTX3090) access.
      it would be `docker.io`.
    * `imageOwner` with the name of the image owner. All images (jupyter notebook and webdav) 
       must have the owner in common.
-4. Define the `deploymentName` as given in the following pattern and set 
+3. Define the `deploymentName` as given in the following pattern and set 
    it in the copied configuration:
    ```
    pattern: (group|department)-((first letter of first name)(full-lastname)|project name)-cuda-(tf|pytorch)
    example person Anton Mustermann: aist-amustermann-cuda-tf
    example project AKFA: aist-akfa-cuda-tf 
    ```
-5. Rename the copied `example.yaml` file to the name of the `deploymentName`.
-6. Set the deploymentImage by choosing between a TensorFlow or PyTorch
+4. Rename the copied `example.yaml` file to the name of the `deploymentName`.
+5. Set the `deploymentImage` by choosing between a TensorFlow or PyTorch
     base image:
     * TensorFlow: `10.42.1.119:32000/aist/scipy-notebook-cuda-tf:latest`
     * PyTorch: `10.42.1.119:32000/aist/scipy-notebook-cuda-pytorch:latest`
-7. Make a **dry run** and check if any error occur. Use as release name
-   the defined deploymentName. This further defines the path at 
+6. Make a **dry run** and check if any error occur. Use as release name
+   the defined `deploymentName`. This further defines the path at 
    which the notebook will be available. Provide the password as parameter 
    defined by `--set-string setup.jovyanPassword=XYZ` and reference 
    the created configuration with `-f cuda-on-kube/releases/<deploymentName>.yaml`
@@ -61,7 +61,7 @@ on the docker hub but with different base images to allow cuda (RTX3090) access.
       aist-amustermann-cuda-tf \
       ./cuda-on-kube
    ```
-8. If no errors occur run the same command without the `--debug --dry-run` 
+7. If no errors occur run the same command without the `--debug --dry-run` 
    flags. Example: 
    ```bash
    helm install \
@@ -110,12 +110,12 @@ This is done by using the `uninstall` argument of the helm system.
 * If the name of the release slated for removal from deployment is unknown then check the output of 
    `kubectl get namespaces` and choose the right name. The Namespace is equal to the 
    release name of each deployment.
-* If the release was deployed with the local machine then a deployment information is located
+* If the release was deployed with the local machine than a deployment information is located
    in the directory releases. Open the correct `*.yaml` and lookup the `deploymentName` you want to remove.
 
-2. Now run `helm uninstall <deploymentName>` to remove the deployment. Example: 
+1. Now run `helm uninstall <deploymentName>` to remove the deployment. Example: 
    `helm uninstall aist-amustermann-cuda-tf`
-3. Now remove the configuration from the `releases` directory or add some information 
+2. Now remove the configuration from the `releases` directory or add some information 
    that this notebook is no longer deployed.
    
 > If errors occur then may God have mercy with you and ask someone to help you. 
@@ -159,7 +159,7 @@ Further the base port with `8888` is used. The provided password in jovyanPasswo
 
 ### templates/webdav.yaml
 
-This definition defines the webdav pod, to access the data directory form your local pc.
+This definition defines the webdav pod, to access the data directory from your local pc.
 
 ## service
 

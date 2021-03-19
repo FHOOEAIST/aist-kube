@@ -113,11 +113,7 @@ To actually remove deployment use `delete`:
 
 > Some errors may occur because of some automatically deployed elements. 
 > If this is the case, then may God have mercy with you and 
-> ask someone to help you. 
-
-## FAQ
-
-Nothing for the moment
+> ask someone to help you.
 
 ## Contributing
 
