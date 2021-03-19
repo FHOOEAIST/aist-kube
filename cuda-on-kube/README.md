@@ -61,7 +61,7 @@ on the docker hub but with different base images to allow cuda (RTX3090) access.
       aist-amustermann-cuda-tf \
       ./cuda-on-kube
    ```
-8. If now errors occur run the same command without the `--debug --dry-run` 
+8. If no errors occur run the same command without the `--debug --dry-run` 
    flags. Example: 
    ```bash
    helm install \

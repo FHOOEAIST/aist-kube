@@ -117,7 +117,7 @@ To actually remove deployment use `delete`:
 
 ## FAQ
 
-If you have any questions, please checkout our [FAQ](https://fhooeaist.github.io/AISTKUBE/faq.html) section.
+Nothing for the moment
 
 ## Contributing
 
