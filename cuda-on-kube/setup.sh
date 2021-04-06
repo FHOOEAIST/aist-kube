@@ -83,6 +83,10 @@ function get_ml_base() {
   if [ -z $ml ]
   then
     ml_base=$1
+    if [ -z $ml_base ]
+    then
+      ml_base="tf"
+    fi
   else
     if [ $ml -lt 2 ]
     then
