@@ -8,16 +8,19 @@
 #
 #
 
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: webdav-ingress
   namespace: storage-test
 spec:
   rules:
-  - http:
-      paths:
-      - path: "/webdav/test"
-        backend:
-          serviceName: webdav-service
-          servicePort: 80
+    - http:
+        paths:
+        - path: /webdav/test
+          pathType: Prefix
+          backend:
+            service:
+              name: webdav-service
+              port:
+                number: 80
