@@ -3,7 +3,7 @@
 This helm chart is required if an additional storage should be dynamically provisioned.
 
 This dynamic storage class only allows to provide dynamic storage from a local host path.
-In a multi node set up a more sophisticated storage solution such as cephfs should be used.
+In a multi node set up a more sophisticated storage solution such as cephfs or glusterfs should be used.
 
 # Important read this FIRST!!!
 
@@ -20,13 +20,14 @@ kubernetes system. This name is unique and can not be deployed multiple times.
 ## How to use this storage class
 
 First prepare a directory in the host system that should be used for storing 
-the persistence volume claim. Have a look at **LVM Volume Group**.
+the persistence volume claim. Have a look at **LVM Volume Group** if you have 
+multiple disks available to create locally virtual volume based on multiple disks.
 
 Next open the *values.yaml* and change the `hostMainPath: …` value to the path
 that from the first step. Now deploy the chart with `helm`, see the deployment step.
 
 Now create in your chart a persistence volume claim that uses as `storageClassName` this
-chart named as `aist-hostpath`. The storage class is based on the `aist/hostpath-provisioner` 
+chart which provides the class `aist-hostpath`. The storage class is based on the `aist/hostpath-provisioner` 
 located in the [aistKube Stacks repository](https://github.com/FHOOEAIST/aist-kube-stacks) images.
 
 Example persistence volume claim:
@@ -47,11 +48,12 @@ spec:
 
 ## Deployment of this storage chart
 
-This storage class and required deployment is integrated into the `kube-system` namespace which
+This storage class, and the deployment is integrated into the `kube-system` namespace which
 is the main namespaces of kubernetes.
 
 Install this chart via helm with the command and providing the image to
-the prepared hostpath-provisioner and don't forget to test with `--debug --dry-run`:
+the prepared hostpath-provisioner and don't forget to test with `--debug --dry-run`.
+Don't forget to set the `hostMainPath` in the values file:
 ```bash
 # if you are in the main directory of the project
 helm install --set-string provisioner=someOwner/hostpath-provisioner local-dynamic-storage ./local-dynamic-storage
