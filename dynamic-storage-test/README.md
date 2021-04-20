@@ -13,7 +13,7 @@ password `test`.
 
 ## Deployment of this storage chart
 
-THis chart requires that the `aist.science/hostpath` provisioner is deployed into the
+This chart requires that the `aist.science/hostpath` provisioner is deployed into the
 kubernetes system.
 
 Install this chart via helm with the command and don't forget to test with `--debug --dry-run`:
@@ -26,16 +26,15 @@ helm install --set-string webdavAndRegistry=docker.io/aist storage-test .
 
 ## Remove the deployment
 
-The chart can be removed at anytime but with the risk of side effects.
+The local-dynamic-storage chart can be removed at anytime but with the risk of side effects.
 If persistence volume claims via this storage class exist then they will
 never be cleaned up because the provisioning system which does also the 
-cleanup does not exist anymore. 
+cleanup does not exist anymore. Other side effect may occur.
 
-So first uninstall all deployment that rely on this storage class (chart)
-and then uninstall this chart.
+So first uninstall all deployment that rely on `aist.science/hostpath` provisioner (chart).
 
 ```bash
-helm uninstall local-dynamic-storage
+helm uninstall storage-test
 ```
 
 
