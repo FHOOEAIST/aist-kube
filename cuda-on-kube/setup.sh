@@ -75,6 +75,7 @@ function get_ml_base() {
   echo "Choose between:"
   printf "\t 1 for TensorFlow (default)\n"
   printf "\t 2 for PyTorch\n"
+  printf "\t 3 for PytorchLightning\n"
   if [ ! -z $1 ]
   then
     echo "Current ML base: $1 (enter to keep it)"
@@ -92,7 +93,12 @@ function get_ml_base() {
     then
       ml_base="tf"
     else
-      ml_base="pytorch"
+      if [ $ml -lt 3 ]
+      then
+	ml_base="pytorch"
+      else
+	ml_base="pytorchlightning"
+      fi
     fi
   fi
 }
