@@ -55,7 +55,7 @@ Example execution:
 
 ### Remove a chart
 
-To remove an existing chart from an existing k8s cluster us the `uninstall`. This chart has to be deployed with helm
+To remove an existing chart from an existing k8s cluster use the `uninstall`. This chart has to be deployed with helm
 otherwise it will do nothing.
 
 `helm uninstall <release name>`
