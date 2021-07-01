@@ -18,4 +18,4 @@ provisioner: ""
 hostMainPath: "/kube_data/default-storage"
 
 image:
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
