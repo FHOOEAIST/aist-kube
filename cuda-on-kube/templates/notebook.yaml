@@ -60,3 +60,6 @@ spec:
               cpu: {{ .Values.setup.notebookCpuLimit | default "1000m" | quote }}
               memory: {{ .Values.setup.notebookMemoryLimit | default "5Gi" | quote }}
               ephemeral-storage: "100Gi"
+            requests:
+              cpu: "1000m"
+              memory: "5Gi"
